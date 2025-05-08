@@ -1,5 +1,5 @@
 import React from 'react';
-import { gameModes } from '../data/gameModes';
+import { gameModes } from '../../data/gameModes';
 import './GameModeSelector.css';
 
 const GameModeSelector = ({ selectedMode, onModeSelect, language }) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { soundManager, SOUND_THEMES } from '../sounds';
+import { soundManager, SOUND_THEMES } from '../../sounds';
 import './SoundControl.css';
 
 const SoundControl = () => {

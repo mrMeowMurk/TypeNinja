@@ -1,12 +1,15 @@
-# 🚀 Type Ninja
+# 🚀 TypeNinja
 
-![Type Ninja Logo](public/logo.png)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-18.0.0-blue.svg)](https://reactjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
+![TypeNinja](https://img.shields.io/badge/TypeNinja-7f5af0?style=for-the-badge&logo=react)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?style=for-the-badge)
+![License](https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge)
 
 > Улучшите свои навыки печати с Type Ninja - современным и интерактивным тренажером слепой печати!
+
+
+<div align="center">
+  <img src="preview.gif" alt="TypeNinja Preview" width="800"/>
+</div>
 
 ## ✨ Особенности
 
@@ -53,7 +56,6 @@ npm start
 ## 🛠️ Технологии
 
 - **React** - современный фреймворк для создания пользовательских интерфейсов
-- **TypeScript** - типизированный JavaScript для более надежного кода
 - **CSS Variables** - для гибкой темизации
 - **Local Storage** - для сохранения настроек и прогресса
 - **Web Audio API** - для воспроизведения звуков
@@ -79,16 +81,15 @@ npm start
 
 Этот проект распространяется под лицензией MIT. Подробности в файле [LICENSE](LICENSE).
 
-## 👥 Авторы
 
-- **Your Name** - *Initial work* - [YourGithub](https://github.com/yourusername)
+## 📞 Контакты
 
-## 🙏 Благодарности
-
-- Спасибо всем контрибьюторам
-- Вдохновлено лучшими практиками слепой печати
-- Использованы звуки с [freesound.org](https://freesound.org)
+Если у вас возникли вопросы или проблемы:
+- Напишите в Telegram: @MrMeowMurk
+- mrMeowMurk - [@mrMeowMurk](https://github.com/mrMeowMurk)
 
 ---
 
-<p align="center">Made with ❤️ for keyboard enthusiasts</p>
+<div align="center">
+  <sub>Сделано с ❤️ by MeowMurk</sub>
+</div> 

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './TypingTest.css';
-import Keyboard from './Keyboard';
-import { soundManager } from '../sounds';
-import SoundControl from './SoundControl';
-import GameModeSelector from './GameModeSelector';
-import { gameModes } from '../data/gameModes';
-import { texts } from '../data/texts';
+import Keyboard from '../Keyboard/Keyboard';
+import { soundManager } from '../../sounds';
+import SoundControl from '../SoundControl/SoundControl';
+import GameModeSelector from '../GameModeSelector/GameModeSelector';
+import { gameModes } from '../../data/gameModes';
+import { texts } from '../../data/texts';
 
 const TypingTest = () => {
   const [text, setText] = useState('');

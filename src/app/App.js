@@ -1,6 +1,6 @@
 import React from 'react';
-import TypingTest from './components/TypingTest';
-import ThemeToggle from './components/ThemeToggle';
+import TypingTest from '../components/TypingTest/TypingTest';
+import ThemeToggle from '../components/ThemeToggle/ThemeToggle';
 import './App.css';
 
 function App() {
