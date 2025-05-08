@@ -92,4 +92,4 @@ npm start
 
 <div align="center">
   <sub>Сделано с ❤️ by MeowMurk</sub>
-</div> 
+</div>
