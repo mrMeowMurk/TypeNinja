@@ -1,7 +1,106 @@
+:root {
+  --primary: #2563eb;
+  --primary-light: #3b82f6;
+  --primary-dark: #1d4ed8;
+  --secondary: #64748b;
+  --accent: #22d3ee;
+  --background: #f8fafc;
+  --surface: #ffffff;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --error: #ef4444;
+  --success: #22c55e;
+  --header-bg: #282c34;
+  --header-text: white;
+  --subtitle-text: #b0c4d8;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--background);
+  color: var(--text);
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: var(--background);
+}
+
+.app-header {
+  margin-bottom: 2rem;
+  animation: fadeInDown 0.8s ease;
+}
+
+.app-header h1 {
+  font-size: 3rem;
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 800;
+}
+
+.app-subtitle {
+  color: var(--text-light);
+  font-size: 1.2rem;
+  margin: 0.5rem 0 0;
+}
+
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.app-footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 640px) {
+  .app {
+    padding: 1rem 0.5rem;
+  }
+
+  .app-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .app-subtitle {
+    font-size: 1rem;
+  }
+}
+
 .App {
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background-color: var(--background);
 }
 
 .App-logo {
@@ -16,15 +115,12 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--header-bg);
   padding: 2rem 1rem 1.5rem 1rem;
-  color: white;
+  color: var(--header-text);
   margin-bottom: 2rem;
   border-radius: 0 0 18px 18px;
-  box-shadow: 0 2px 12px rgba(40,44,52,0.08);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
 }
 
 .logo-emoji {
@@ -42,7 +138,7 @@
 .App-header h1 {
   margin: 0;
   font-size: 2.2rem;
-  color: #61dafb;
+  color: var(--primary);
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   letter-spacing: 1px;
 }
@@ -50,7 +146,7 @@
 .subtitle {
   margin: 0.5rem 0 0;
   font-size: 1.1rem;
-  color: #b0c4d8;
+  color: var(--subtitle-text);
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   font-weight: 400;
   letter-spacing: 0.5px;
@@ -77,6 +173,9 @@
 
 main {
   padding: 0 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .header-extra {
@@ -89,4 +188,22 @@ main {
   line-height: 1.5;
   font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
   opacity: 0.92;
+}
+
+@media (max-width: 640px) {
+  .App-header {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .logo-emoji {
+    font-size: 2rem;
+  }
+
+  .App-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
 }
