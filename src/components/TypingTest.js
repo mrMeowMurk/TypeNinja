@@ -3,6 +3,9 @@ import './TypingTest.css';
 import Keyboard from './Keyboard';
 import { soundManager } from '../sounds';
 import SoundControl from './SoundControl';
+import GameModeSelector from './GameModeSelector';
+import { gameModes } from '../data/gameModes';
+import { texts } from '../data/texts';
 
 const TypingTest = () => {
   const [text, setText] = useState('');
@@ -25,6 +28,12 @@ const TypingTest = () => {
   const [currentCharIndex, setCurrentCharIndex] = useState(0);
   const [errors, setErrors] = useState(0);
   const [currentChar, setCurrentChar] = useState('');
+  const [gameMode, setGameMode] = useState('marathon');
+  const [botProgress, setBotProgress] = useState(0);
+  const [textChunks, setTextChunks] = useState([]);
+  const [visibleChunks, setVisibleChunks] = useState([]);
+  const botRef = useRef(null);
+  const [botDifficulty, setBotDifficulty] = useState('normal');
 
   const defaultBestResults = {
     ru: { 
@@ -306,25 +315,45 @@ const TypingTest = () => {
       startTimer();
     }
 
+    const currentMode = gameModes[gameMode];
+    
+    // Проверяем, разрешено ли использование backspace
+    if (e.key === 'Backspace' && !currentMode.config.allowBackspace) {
+      e.preventDefault();
+      return;
+    }
+
+    setPressedKey(e.key);
+  };
+
+  const handleKeyPress = (e) => {
+    const currentMode = gameModes[gameMode];
     const currentChar = text[userInput.length];
+
+    // Обработка режима "выживание"
+    if (currentMode.id === 'survival' && e.key !== currentChar) {
+      setTimeLeft(prev => Math.max(0, prev - currentMode.config.mistakePenalty));
+    }
+
+    // Обработка режима "диктант"
+    if (currentMode.id === 'dictation') {
+      const currentChunkIndex = Math.floor(userInput.length / currentMode.config.textChunkSize);
+      if (currentChunkIndex >= 0 && currentChunkIndex < textChunks.length && 
+          !visibleChunks.includes(textChunks[currentChunkIndex])) {
+        setVisibleChunks(prev => [...prev, textChunks[currentChunkIndex]]);
+      }
+    }
+
+    // Воспроизведение звуков при нажатии
     if (e.key === currentChar) {
-      // Правильная клавиша
       if (e.key === ' ') {
         soundManager.play('keySpace');
       } else {
         soundManager.play('keyPress');
       }
-      setCorrectChars(prev => prev + 1);
-      setCurrentCharIndex(prev => prev + 1);
     } else {
-      // Ошибка при печати
       soundManager.play('keyError');
-      setErrors(prev => prev + 1);
     }
-  };
-
-  const handleKeyPress = (e) => {
-    setPressedKey(e.key);
   };
 
   const handleKeyUp = () => {
@@ -353,24 +382,263 @@ const TypingTest = () => {
   };
 
   const handleRestart = () => {
-    setText(sampleTexts[language][mode][difficulty][Math.floor(Math.random() * sampleTexts[language][mode][difficulty].length)]);
+    setText(getRandomText());
     setUserInput('');
     setStartTime(null);
     setIsActive(false);
     setWpm(0);
     setAccuracy(100);
-    setTimeLeft(testDuration);
+    setBotProgress(0);
+    setTimeLeft(gameMode === 'marathon' ? Infinity : testDuration);
     setIsFinished(false);
+    setVisibleChunks([]);
+    setTextChunks([]);
+    setCurrentCharIndex(0);
+    setCorrectChars(0);
+    setErrors(0);
   };
 
   const startTimer = () => {
     // Implementation of startTimer function
   };
 
+  // Добавим useEffect для инициализации текста при смене режима
+  useEffect(() => {
+    initializeText();
+  }, [gameMode, language, mode, difficulty]);
+
+  // Обновляем функцию initializeText для работы со словами
+  const initializeText = () => {
+    const selectedText = getRandomText();
+    setText(selectedText);
+    
+    if (gameMode === 'dictation') {
+      // Разбиваем текст на слова
+      const words = selectedText.split(/(\s+)/);
+      setTextChunks(words);
+      // Показываем первые 2-3 слова
+      const initialWords = words.slice(0, 3);
+      setVisibleChunks(initialWords);
+    }
+
+    // Сброс состояния при смене текста
+    setUserInput('');
+    setCurrentCharIndex(0);
+    setBotProgress(0);
+    setCorrectChars(0);
+    setErrors(0);
+    setWpm(0);
+    setAccuracy(100);
+    setIsFinished(false);
+    setIsActive(false);
+    setStartTime(null);
+  };
+
+  // Обновляем useEffect для обработки прогресса в режиме диктанта
+  useEffect(() => {
+    if (gameMode === 'dictation' && isActive) {
+      const words = text.split(/(\s+)/);
+      const typedLength = userInput.length;
+      let visibleLength = 0;
+      let visibleWordsCount = 0;
+
+      // Определяем, сколько слов нужно показать
+      for (let i = 0; i < words.length; i++) {
+        visibleLength += words[i].length;
+        if (visibleLength > typedLength + 15) { // Показываем слова на 15 символов вперед
+          visibleWordsCount = i + 1;
+          break;
+        }
+        visibleWordsCount = i + 1;
+      }
+
+      // Обновляем видимые слова
+      setVisibleChunks(words.slice(0, Math.min(visibleWordsCount + 2, words.length)));
+    }
+  }, [gameMode, userInput, text, isActive]);
+
+  // Обновляем функцию getRandomText
+  const getRandomText = () => {
+    if (gameMode === 'words') {
+      const wordsList = texts[language].words[difficulty];
+      const selectedWords = [];
+      for (let i = 0; i < 10; i++) {
+        const randomWord = wordsList[Math.floor(Math.random() * wordsList.length)];
+        selectedWords.push(randomWord);
+      }
+      return selectedWords.join(' ');
+    }
+    
+    // Определяем категорию текста в зависимости от режима
+    let textCategory;
+    switch (mode) {
+      case 'numbers':
+        textCategory = 'numbers';
+        break;
+      case 'code':
+        textCategory = 'technical';
+        break;
+      case 'text':
+      default:
+        textCategory = Math.random() < 0.5 ? 'quotes' : 'literature';
+        break;
+    }
+    
+    const availableTexts = texts[language][textCategory]?.[difficulty] || [];
+    if (availableTexts.length === 0) {
+      // Если тексты для выбранной категории отсутствуют, возвращаем запасной вариант
+      return mode === 'numbers' ? 
+        "12345 67890 98765 43210" : 
+        "Text not available for this mode and language";
+    }
+    return availableTexts[Math.floor(Math.random() * availableTexts.length)];
+  };
+
+  // Обработчик изменения режима игры
+  const handleGameModeChange = (newMode) => {
+    setGameMode(newMode);
+    handleRestart();
+    
+    // Сброс специфичных для режимов состояний
+    setBotProgress(0);
+    setTextChunks([]);
+    setVisibleChunks([]);
+  };
+
+  // Обновляем конфигурацию скорости бота
+  const botSpeedConfig = {
+    easy: {
+      baseSpeed: 25,
+      randomVariation: 5,
+      mistakeChance: 0.1,
+      pauseDuration: 800,
+      pauseChance: 0.08
+    },
+    normal: {
+      baseSpeed: 40,
+      randomVariation: 7,
+      mistakeChance: 0.07,
+      pauseDuration: 600,
+      pauseChance: 0.06
+    },
+    hard: {
+      baseSpeed: 55,
+      randomVariation: 8,
+      mistakeChance: 0.05,
+      pauseDuration: 400,
+      pauseChance: 0.04
+    },
+    expert: {
+      baseSpeed: 70,
+      randomVariation: 10,
+      mistakeChance: 0.03,
+      pauseDuration: 300,
+      pauseChance: 0.02
+    }
+  };
+
+  // Обновляем useEffect для режима гонки
+  useEffect(() => {
+    let botInterval;
+    let lastUpdateTime = Date.now();
+    let isPaused = false;
+    let pauseTimeout = null;
+    
+    if (gameMode === 'race' && isActive && !isFinished) {
+      const config = botSpeedConfig[botDifficulty];
+      
+      botInterval = setInterval(() => {
+        if (isPaused) return;
+
+        // Проверяем, нужно ли сделать паузу
+        if (Math.random() < config.pauseChance) {
+          isPaused = true;
+          pauseTimeout = setTimeout(() => {
+            isPaused = false;
+          }, config.pauseDuration);
+          return;
+        }
+
+        const now = Date.now();
+        const deltaTime = now - lastUpdateTime;
+        lastUpdateTime = now;
+
+        // Добавляем случайную вариацию к базовой скорости
+        const randomSpeed = config.baseSpeed + (Math.random() * 2 - 1) * config.randomVariation;
+        
+        // Уменьшаем скорость, если бот "ошибается"
+        const effectiveSpeed = Math.random() < config.mistakeChance ? 
+          randomSpeed * 0.3 : // Замедление при ошибке
+          randomSpeed;
+
+        const charactersPerSecond = (effectiveSpeed * 5) / 60;
+        const progressIncrement = (charactersPerSecond * deltaTime / 1000 / text.length) * 100;
+
+        setBotProgress(prev => {
+          const newProgress = Math.min(prev + progressIncrement, 100);
+          if (newProgress >= 100) {
+            clearInterval(botInterval);
+            if (userInput.length < text.length) {
+              setIsFinished(true);
+              setIsActive(false);
+              soundManager.play('keyError');
+            }
+          }
+          return newProgress;
+        });
+      }, 50);
+    }
+
+    return () => {
+      if (botInterval) clearInterval(botInterval);
+      if (pauseTimeout) clearTimeout(pauseTimeout);
+    };
+  }, [gameMode, isActive, isFinished, botDifficulty, text.length, userInput.length]);
+
+  // Обновляем селектор сложности бота
+  const renderBotDifficultySelector = () => {
+    if (gameMode !== 'race') return null;
+
+    return (
+      <div className="bot-difficulty-selector">
+        <label className="control-label">
+          {language === 'ru' ? 'Сложность бота:' : 'Bot Difficulty:'}
+        </label>
+        <select 
+          value={botDifficulty}
+          onChange={(e) => setBotDifficulty(e.target.value)}
+          className="difficulty-select"
+        >
+          <option value="easy">{language === 'ru' ? 'Легкий' : 'Easy'} (15 WPM)</option>
+          <option value="normal">{language === 'ru' ? 'Средний' : 'Normal'} (25 WPM)</option>
+          <option value="hard">{language === 'ru' ? 'Сложный' : 'Hard'} (35 WPM)</option>
+          <option value="expert">{language === 'ru' ? 'Эксперт' : 'Expert'} (50 WPM)</option>
+        </select>
+      </div>
+    );
+  };
+
+  // Обновляем компонент для отображения времени
+  const renderTimer = () => {
+    if (gameMode === 'marathon') {
+      return (
+        <div className="timer">
+          {language === 'ru' ? 'Без ограничений' : 'No limit'}
+        </div>
+      );
+    }
+    return <div className="timer">{timeLeft} {language === 'ru' ? 'сек' : 'sec'}</div>;
+  };
+
   return (
     <div className="typing-test">
-      <SoundControl />
       <div className="typing-test-header">
+        <GameModeSelector
+          selectedMode={gameMode}
+          onModeSelect={handleGameModeChange}
+          language={language}
+        />
+
         <div className="controls-group">
           <div className="settings-row">
             <div className="language-selector">
@@ -461,15 +729,19 @@ const TypingTest = () => {
               </button>
             </div>
           </div>
+
+          {renderBotDifficultySelector()}
         </div>
 
         <div className="test-controls">
           <button className="restart-btn" onClick={handleRestart}>
             {language === 'ru' ? 'Начать заново' : 'Restart'}
           </button>
-          <div className="timer">{timeLeft} {language === 'ru' ? 'сек' : 'sec'}</div>
+          {renderTimer()}
         </div>
       </div>
+
+      <SoundControl />
 
       <div className="best-results">
         <div className="best-result">
@@ -479,20 +751,59 @@ const TypingTest = () => {
         </div>
       </div>
 
-      <div className="text-display" style={{ fontSize: `${fontSize}px` }}>
-        {text.split('').map((char, index) => {
-          let className = 'char';
-          if (index < userInput.length) {
-            className += userInput[index] === char ? ' correct' : ' incorrect';
-          }
-          if (showHints && index === userInput.length) {
-            const fingerHint = getFingerForKey(char);
-            if (fingerHint) {
-              className += ' next-char';
-            }
-          }
-          return <span key={index} className={className}>{char}</span>;
-        })}
+      <div className="test-area">
+        {gameMode === 'race' && (
+          <div className="race-progress">
+            <div className="user-progress" style={{ width: `${(userInput.length / text.length) * 100}%` }} />
+            <div className="bot-progress" style={{ width: `${botProgress}%` }} />
+          </div>
+        )}
+
+        <div className={`text-display ${gameMode === 'dictation' ? 'dictation-mode' : ''}`} 
+             style={{ fontSize: `${fontSize}px` }}>
+          {(gameMode === 'dictation' ? 
+            textChunks.map((chunk, i) => (
+              <span 
+                key={i} 
+                className={`word ${visibleChunks.includes(chunk) ? 'visible' : ''}`}
+              >
+                {chunk.split('').map((char, charIndex) => {
+                  const globalIndex = textChunks.slice(0, i).join('').length + charIndex;
+                  let className = 'char';
+                  if (globalIndex < userInput.length) {
+                    className += userInput[globalIndex] === char ? ' correct' : ' incorrect';
+                  } else if (globalIndex === userInput.length) {
+                    className += ' current';
+                  }
+                  return <span key={charIndex} className={className}>{char}</span>;
+                })}
+              </span>
+            ))
+            : 
+            text.split('').map((char, index) => {
+              let className = 'char';
+              if (index < userInput.length) {
+                className += userInput[index] === char ? ' correct' : ' incorrect';
+              } else if (index === userInput.length) {
+                className += ' current';
+              }
+              return <span key={index} className={className}>{char}</span>;
+            })
+          )}
+        </div>
+
+        <input
+          type="text"
+          value={userInput}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          onKeyPress={handleKeyPress}
+          onKeyUp={handleKeyUp}
+          placeholder={language === 'ru' ? 'Начните печатать...' : 'Start typing...'}
+          disabled={!isActive && (userInput.length === text.length || isFinished || timeLeft === 0)}
+          style={{ fontSize: `${fontSize}px` }}
+          className="typing-input"
+        />
       </div>
 
       {showHints && (
@@ -505,17 +816,6 @@ const TypingTest = () => {
           )}
         </div>
       )}
-
-      <input
-        type="text"
-        value={userInput}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-        onKeyUp={handleKeyUp}
-        placeholder={language === 'ru' ? 'Начните печатать...' : 'Start typing...'}
-        disabled={!isActive && (userInput.length === text.length || isFinished || timeLeft === 0)}
-        className="typing-input"
-      />
 
       <div className="stats">
         <div className="stat">WPM: {wpm}</div>

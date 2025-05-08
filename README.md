@@ -1,70 +1,94 @@
-# Getting Started with Create React App
+# 🚀 Type Ninja
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+![Type Ninja Logo](public/logo.png)
 
-## Available Scripts
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-18.0.0-blue.svg)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9.5-blue.svg)](https://www.typescriptlang.org/)
 
-In the project directory, you can run:
+> Улучшите свои навыки печати с Type Ninja - современным и интерактивным тренажером слепой печати!
 
-### `npm start`
+## ✨ Особенности
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 🎮 Режимы тренировки
+- **🏃 Марафон** - печатайте без ограничения времени
+- **💪 Выживание** - каждая ошибка уменьшает время
+- **📝 Слова** - тренировка на коротких словах
+- **🏎️ Гонка** - соревнование с ботом
+- **📚 Диктант** - текст появляется постепенно
+- **⚡ Без исправлений** - нельзя использовать backspace
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🌈 Персонализация
+- **🎨 Темная и светлая темы**
+- **🔊 Настраиваемые звуки клавиш**
+- **📏 Регулируемый размер текста**
+- **💡 Подсказки для пальцев**
 
-### `npm test`
+### 📚 Разнообразный контент
+- **📖 Литературные тексты**
+- **💻 Программный код**
+- **🔢 Цифры и символы**
+- **💭 Цитаты и афоризмы**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 🌍 Мультиязычность
+- 🇷🇺 Русский
+- 🇬🇧 English
 
-### `npm run build`
+## 🚀 Быстрый старт
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+# Клонировать репозиторий
+git clone https://github.com/yourusername/type-ninja.git
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+# Перейти в директорию проекта
+cd type-ninja
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+# Установить зависимости
+npm install
 
-### `npm run eject`
+# Запустить приложение
+npm start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🛠️ Технологии
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **React** - современный фреймворк для создания пользовательских интерфейсов
+- **TypeScript** - типизированный JavaScript для более надежного кода
+- **CSS Variables** - для гибкой темизации
+- **Local Storage** - для сохранения настроек и прогресса
+- **Web Audio API** - для воспроизведения звуков
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📊 Статистика и прогресс
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Отслеживание скорости печати (WPM)
+- Измерение точности
+- Сохранение лучших результатов
+- Детальная статистика по режимам
 
-## Learn More
+## 🤝 Вклад в проект
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Мы приветствуем ваш вклад в развитие Type Ninja! Вот как вы можете помочь:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Форкните репозиторий
+2. Создайте ветку для ваших изменений (`git checkout -b feature/amazing-feature`)
+3. Зафиксируйте изменения (`git commit -m 'Add some amazing feature'`)
+4. Отправьте изменения в ваш форк (`git push origin feature/amazing-feature`)
+5. Откройте Pull Request
 
-### Code Splitting
+## 📝 Лицензия
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Этот проект распространяется под лицензией MIT. Подробности в файле [LICENSE](LICENSE).
 
-### Analyzing the Bundle Size
+## 👥 Авторы
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Your Name** - *Initial work* - [YourGithub](https://github.com/yourusername)
 
-### Making a Progressive Web App
+## 🙏 Благодарности
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- Спасибо всем контрибьюторам
+- Вдохновлено лучшими практиками слепой печати
+- Использованы звуки с [freesound.org](https://freesound.org)
 
-### Advanced Configuration
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+<p align="center">Made with ❤️ for keyboard enthusiasts</p>

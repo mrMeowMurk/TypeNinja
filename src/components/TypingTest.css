@@ -90,41 +90,87 @@
 .settings-row {
   display: flex;
   gap: 1rem;
-  align-items: center;
+  align-items: flex-start;
   flex-wrap: wrap;
-  justify-content: center;
+  padding: 0.5rem;
+  background: var(--surface);
+  border-radius: 8px;
 }
 
-.language-selector,
-.difficulty-selector,
-.mode-selector {
+.mode-group,
+.length-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: var(--background);
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+}
+
+.mode-label,
+.length-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 500;
+}
+
+.mode-selector,
+.difficulty-selector {
   display: flex;
   gap: 0.5rem;
 }
 
+.test-settings {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--background);
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+}
+
 .control-btn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
   background: var(--surface);
   color: var(--text);
-  border: 1px solid var(--secondary);
-  border-radius: 8px;
-  padding: 0.6rem 1.2rem;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-family: inherit;
-  white-space: nowrap;
-  font-weight: 500;
+  min-width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .control-btn:hover {
   background: var(--background);
   border-color: var(--primary);
-  color: var(--primary);
 }
 
 .control-btn.active {
   background: var(--primary);
   color: white;
+  border-color: var(--primary);
+}
+
+.duration-select {
+  padding: 0.5rem;
+  border: 1px solid var(--secondary);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.9rem;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.duration-select:focus {
+  outline: none;
   border-color: var(--primary);
 }
 
@@ -215,30 +261,6 @@
   animation: blink 1s infinite;
 }
 
-.test-settings {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.duration-select {
-  padding: 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--secondary);
-  background: var(--surface);
-  color: var(--text);
-  font-family: inherit;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-}
-
-.duration-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
-}
-
 .font-size-controls {
   display: flex;
   gap: 0.25rem;
@@ -307,5 +329,240 @@
   .control-btn {
     padding: 0.5rem 1rem;
     font-size: 0.9rem;
+  }
+}
+
+.race-progress {
+  width: 100%;
+  height: 10px;
+  background: var(--surface);
+  border-radius: 5px;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.user-progress,
+.bot-progress {
+  position: absolute;
+  height: 100%;
+  transition: width 0.1s ease;
+}
+
+.user-progress {
+  background: var(--primary);
+  z-index: 2;
+}
+
+.bot-progress {
+  background: var(--error);
+  opacity: 0.5;
+  z-index: 1;
+}
+
+.text-display {
+  position: relative;
+  background: var(--surface);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+}
+
+.text-display.dictation {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.test-area {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Accessibility improvements */
+.typing-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.typing-input:focus:not(:focus-visible) {
+  box-shadow: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .text-display {
+    border: 2px solid var(--text);
+  }
+  
+  .user-progress {
+    background: var(--text);
+  }
+  
+  .bot-progress {
+    background: var(--error);
+    opacity: 1;
+  }
+}
+
+.text-display .char.current {
+  border-bottom: 2px solid #4CAF50;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.text-display {
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.5;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+/* Стили для режима диктанта */
+.dictation-mode {
+  position: relative;
+}
+
+.dictation-mode .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.dictation-mode .word.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Добавляем эффект затухания для следующих слов */
+.dictation-mode::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50px;
+  background: linear-gradient(transparent, var(--surface));
+  pointer-events: none;
+}
+
+/* Анимация для текущего символа */
+.dictation-mode .char.current {
+  position: relative;
+}
+
+.dictation-mode .char.current::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 2px;
+  background: var(--primary);
+  animation: blink 1s infinite;
+}
+
+/* Улучшаем отображение пробелов */
+.dictation-mode .word:empty {
+  display: inline-block;
+  width: 0.5em;
+}
+
+/* Добавляем плавный переход между состояниями символов */
+.dictation-mode .char {
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.bot-difficulty-selector {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  background: var(--surface);
+  border-radius: 8px;
+  margin: 0.5rem 0;
+}
+
+.bot-difficulty-selector .control-label {
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.difficulty-select {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  min-width: 150px;
+}
+
+.difficulty-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.difficulty-select option {
+  background: var(--surface);
+  color: var(--text);
+  padding: 0.5rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 640px) {
+  .bot-difficulty-selector {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .difficulty-select {
+    width: 100%;
+  }
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .settings-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mode-group,
+  .length-group,
+  .test-settings {
+    width: 100%;
+  }
+
+  .mode-selector,
+  .difficulty-selector {
+    justify-content: space-between;
+  }
+
+  .control-btn {
+    flex: 1;
   }
 } 
