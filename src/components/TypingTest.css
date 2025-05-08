@@ -60,4 +60,96 @@
   padding: 0.5rem 1rem;
   background: #e9ecef;
   border-radius: 6px;
+}
+
+.typing-test-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.restart-btn {
+  background: #282c34;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+.restart-btn:hover {
+  background: #61dafb;
+  color: #282c34;
+}
+
+.timer {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #007bff;
+  background: #e9ecef;
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  min-width: 70px;
+  text-align: center;
+}
+
+.finish-message {
+  margin-top: 1.5rem;
+  font-size: 1.15rem;
+  color: #28a745;
+  background: #eafbe7;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  animation: fadein 0.7s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.difficulty-selector {
+  display: flex;
+  gap: 1rem;
+}
+
+.difficulty-btn {
+  background: #3b4049;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+.difficulty-btn:hover {
+  background: #4a4f5a;
+}
+
+.difficulty-btn.active {
+  background: #61dafb;
+  color: #282c34;
+}
+
+.best-results {
+  margin: 1rem 0;
+  padding: 0.8rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+}
+
+.best-result {
+  color: #007bff;
+  font-size: 1rem;
+  font-weight: 500;
 } 
