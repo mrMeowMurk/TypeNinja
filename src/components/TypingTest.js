@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './TypingTest.css';
 import Keyboard from './Keyboard';
+import { soundManager } from '../sounds';
+import SoundControl from './SoundControl';
 
 const TypingTest = () => {
   const [text, setText] = useState('');
@@ -18,6 +20,11 @@ const TypingTest = () => {
   const [showHints, setShowHints] = useState(true);
   const [testDuration, setTestDuration] = useState(60);
   const [fontSize, setFontSize] = useState(16);
+  const [isStarted, setIsStarted] = useState(false);
+  const [correctChars, setCorrectChars] = useState(0);
+  const [currentCharIndex, setCurrentCharIndex] = useState(0);
+  const [errors, setErrors] = useState(0);
+  const [currentChar, setCurrentChar] = useState('');
 
   const defaultBestResults = {
     ru: { 
@@ -159,14 +166,15 @@ const TypingTest = () => {
       },
       code: {
         easy: [
-          "функция тест() { консоль.лог('Привет, мир!'); }",
-          "если (условие) { вернуть истина; }",
-          "const массив = [1, 2, 3, 4, 5];",
-          "импорт Реакт из 'react';"
+          "function hello() { console.log('Hello, World!'); }",
+          "const sum = (a, b) => a + b;",
+          "if (condition) { return true; } else { return false; }",
+          "import React from 'react';",
+          "const [state, setState] = useState(null);"
         ],
         hard: [
-          "функция быстраяСортировка(массив) {\n  если (массив.длина <= 1) вернуть массив;\n  const опорный = массив[0];\n  const левая = массив.фильтр((х, и) => и > 0 && х < опорный);\n  const правая = массив.фильтр(х => х > опорный);\n  вернуть [...быстраяСортировка(левая), опорный, ...быстраяСортировка(правая)];\n}"
-        ]
+          "function quickSort(arr) {\n  if (arr.length <= 1) return arr;\n  const pivot = arr[0];\n  const left = arr.filter((x, i) => i > 0 && x < pivot);\n  const right = arr.filter(x => x > pivot);\n  return [...quickSort(left), pivot, ...quickSort(right)];\n}",
+          "class Node {\n  constructor(value) {\n    this.value = value;\n    this.next = null;\n  }\n}"        ]
       },
       numbers: {
         easy: [
@@ -292,6 +300,29 @@ const TypingTest = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (!isStarted && !isFinished) {
+      setIsStarted(true);
+      startTimer();
+    }
+
+    const currentChar = text[userInput.length];
+    if (e.key === currentChar) {
+      // Правильная клавиша
+      if (e.key === ' ') {
+        soundManager.play('keySpace');
+      } else {
+        soundManager.play('keyPress');
+      }
+      setCorrectChars(prev => prev + 1);
+      setCurrentCharIndex(prev => prev + 1);
+    } else {
+      // Ошибка при печати
+      soundManager.play('keyError');
+      setErrors(prev => prev + 1);
+    }
+  };
+
   const handleKeyPress = (e) => {
     setPressedKey(e.key);
   };
@@ -332,8 +363,13 @@ const TypingTest = () => {
     setIsFinished(false);
   };
 
+  const startTimer = () => {
+    // Implementation of startTimer function
+  };
+
   return (
     <div className="typing-test">
+      <SoundControl />
       <div className="typing-test-header">
         <div className="controls-group">
           <div className="settings-row">
@@ -474,7 +510,7 @@ const TypingTest = () => {
         type="text"
         value={userInput}
         onChange={handleInputChange}
-        onKeyDown={handleKeyPress}
+        onKeyDown={handleKeyDown}
         onKeyUp={handleKeyUp}
         placeholder={language === 'ru' ? 'Начните печатать...' : 'Start typing...'}
         disabled={!isActive && (userInput.length === text.length || isFinished || timeLeft === 0)}
