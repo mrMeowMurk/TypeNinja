@@ -90,87 +90,41 @@
 .settings-row {
   display: flex;
   gap: 1rem;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  padding: 0.5rem;
-  background: var(--surface);
-  border-radius: 8px;
-}
-
-.mode-group,
-.length-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background: var(--background);
-  border-radius: 8px;
-  border: 1px solid var(--secondary);
-}
-
-.mode-label,
-.length-label {
-  font-size: 0.9rem;
-  color: var(--text-light);
-  font-weight: 500;
-}
-
-.mode-selector,
-.difficulty-selector {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.test-settings {
-  display: flex;
-  gap: 1rem;
   align-items: center;
-  padding: 0.75rem;
-  background: var(--background);
-  border-radius: 8px;
-  border: 1px solid var(--secondary);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.language-selector,
+.difficulty-selector,
+.mode-selector {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .control-btn {
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--secondary);
-  border-radius: 6px;
   background: var(--surface);
   color: var(--text);
-  font-size: 0.9rem;
+  border: 1px solid var(--secondary);
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  min-width: 80px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  font-family: inherit;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
 .control-btn:hover {
   background: var(--background);
   border-color: var(--primary);
+  color: var(--primary);
 }
 
 .control-btn.active {
   background: var(--primary);
   color: white;
-  border-color: var(--primary);
-}
-
-.duration-select {
-  padding: 0.5rem;
-  border: 1px solid var(--secondary);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 0.9rem;
-  cursor: pointer;
-  min-width: 120px;
-}
-
-.duration-select:focus {
-  outline: none;
   border-color: var(--primary);
 }
 
@@ -259,6 +213,30 @@
   height: 2px;
   background: var(--primary);
   animation: blink 1s infinite;
+}
+
+.test-settings {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.duration-select {
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid var(--secondary);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.duration-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
 }
 
 .font-size-controls {
@@ -491,12 +469,16 @@
 
 .bot-difficulty-selector {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 1rem;
   padding: 0.5rem;
   background: var(--surface);
   border-radius: 8px;
   margin: 0.5rem 0;
+  border: 1px solid var(--secondary);
+  color: var(--text);
+  font-family: inherit;
 }
 
 .bot-difficulty-selector .control-label {
@@ -505,6 +487,7 @@
   font-weight: 500;
   white-space: nowrap;
 }
+
 
 .difficulty-select {
   padding: 0.6rem;
@@ -522,7 +505,6 @@
 .difficulty-select:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 3px var(--primary-light);
 }
 
 .difficulty-select option {

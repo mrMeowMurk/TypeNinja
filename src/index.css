@@ -17,9 +17,9 @@
 
 /* Dark theme */
 :root[data-theme='dark'] {
-  --primary: #61dafb;
+  --primary: #61dafbb6;
   --primary-dark: #0d9ebd;
-  --primary-light: #76e0ff;
+  --primary-light: #44b4d6c9;
   --success: #4ade80;
   --error: #f87171;
   --background: #1a1d23;
